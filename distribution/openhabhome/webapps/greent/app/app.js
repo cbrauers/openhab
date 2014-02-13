@@ -93,7 +93,7 @@ function unsubscribe(){
 
 function getOpenhabVersion(){
 	Ext.Ajax.request({
-    url: '/static/version',
+    url: '../static/version',
     success: function(response){
         oph_openHAB_version = response.responseText;
 		getUpdateServer();
@@ -104,7 +104,7 @@ function getOpenhabVersion(){
 
 function getUpdateServer(){
 	Ext.Ajax.request({
-    url: '/greent/app/updates_server.cfg',
+    url: './app/updates_server.cfg',
     success: function(response){
 		checkForUpdates(response.responseText);
     },
@@ -119,7 +119,7 @@ function getUpdateServer(){
 
 function checkForUpdates(updates_srver){
 	Ext.data.JsonP.request({
-            url: updates_srver+'/check.php?version='+oph_greenT_build,
+            url: updates_srver+'../check.php?version='+oph_greenT_build,
             callbackKey: 'callback',
             success: function(result, request) {
                
@@ -301,7 +301,7 @@ var sitemapsStore = new Ext.data.Store({
         }
     }, proxy: {
         type: 'ajax',
-        url: '/rest/sitemaps',
+        url: '../rest/sitemaps',
         headers: {
             'Accept': 'application/json',
         }, noCache: true,
@@ -607,7 +607,7 @@ var settingsWindow = {
 
 function readUpdateLog(){
 	Ext.Ajax.request({
-    url: '/greent/update.tmp',
+    url: './update.tmp',
     success: function(response){
 		settingsPanel.getItems().items[2].getItems().items[1].setHtml(response.responseText);
 		Ext.defer(readUpdateLog, 3000, this);
@@ -642,7 +642,7 @@ function loadUIData(sitemap_name) {
     });
 	
     Ext.Ajax.request({
-        url: '/rest/sitemaps/' + sitemap_name,
+        url: '../rest/sitemaps/' + sitemap_name,
         headers: {
             'Accept': 'application/json',
         }, success: function (result_obj) {
@@ -1152,7 +1152,7 @@ function updateWidgetsAjax(page, update_type) {
             };
         } else if (update_type == 'long-poll') {
 			unsubscribe();
-            subscribe('/rest/sitemaps/' + sitemap + '/' + page);
+            subscribe('../rest/sitemaps/' + sitemap + '/' + page);
 			return;
         }
 
@@ -1166,7 +1166,7 @@ function updateWidgetsAjax(page, update_type) {
 		
 		 req = Ext.Ajax.request({
 
-            url: '/rest/sitemaps/' + sitemap + '/' + page,
+            url: '../rest/sitemaps/' + sitemap + '/' + page,
             headers: update_type_header,
             disableCaching: true,
 			//autoAbort: true,
@@ -1332,7 +1332,7 @@ Ext.define('Oph.field.ButtonsSelect', {
 
 
     setValueData: function (newValue) {
-        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(/images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div>');
+        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(../images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div>');
         if (Ext.isArray(newValue.mapping)) {
             for (var i in newValue.mapping) {
                 this._component._items.items[i].removeCls('x-button-action');
@@ -1386,7 +1386,7 @@ Ext.define('Oph.field.Slider', {
         if (newValue.item) {
             this.setValue(newValue.item.state);
         }
-        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(/images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div>');
+        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(../images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div>');
         return this;
     }
 });
@@ -1427,7 +1427,7 @@ Ext.define('Oph.field.Setpoint', {
 			}
             
         }
-        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(/images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div>');
+        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(../images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div>');
         return this;
     }
 });
@@ -1465,7 +1465,7 @@ Ext.define('Oph.field.Select', {
         if (newValue.item) {
             this.setValue(newValue.item.state);
         }
-        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(/images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div>');
+        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(../images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div>');
         return this;
     }, onListSelect: function (item, record) {
         var me = this;
@@ -1510,7 +1510,7 @@ Ext.define('Oph.field.Text', {
     }, setValueData: function (newValue) {
 		//this.setHtml(newValue.item.state);
         this.setHtml(newValue.label.match(/\[(.*?)\]/) ? newValue.label.match(/\[(.*?)\]/)[1] : newValue.label);
-        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(/images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/\[(.*?)\]/, '')+'</div>');
+        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(../images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/\[(.*?)\]/, '')+'</div>');
         return this;
     }
 });
@@ -1549,7 +1549,7 @@ Ext.define('Oph.field.Toggle', {
         if (newValue.item) {
             this.setValue(this.formatInputValue(newValue.item.state));
         }
-        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(/images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div>');
+        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(../images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div>');
         return this;
     }, formatInputValue: function (value) {
         if (value == "ON") {
@@ -1570,7 +1570,7 @@ function sendCommand(oph_item, value) {
     if (oph_item) {
         Ext.Ajax.request({
             comm_method: 'ajax',
-            url: '/rest/items/' + oph_item + '/',
+            url: '../rest/items/' + oph_item + '/',
             method: 'POST',
             params: value,
             headers: {
@@ -1671,7 +1671,7 @@ Ext.define('Oph.field.Rollershutter', {
         this.callParent();
         
     }, setValueData: function (newValue) {
-        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(/images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div>');
+        this.setLabel('<div class="'+icon_class+'" style="'+icon_style+'(../images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div>');
 
         return this;
     }
@@ -1702,7 +1702,7 @@ Ext.define('Oph.field.Button', {
     initialize: function () {
         this.callParent();
     }, setValueData: function (newValue) {
-        this.setHtml('<div class="'+icon_class+'" style="'+icon_style+'(/images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div><span class="arrow"></span>');
+        this.setHtml('<div class="'+icon_class+'" style="'+icon_style+'(../images/' + newValue.icon + '.png);"></div><div class="oph_label">' + newValue.label.replace(/[\[\]']+/g, '')+'</div><span class="arrow"></span>');
         return this;
     }, getName: function () {
         return this.config.name;
@@ -1778,7 +1778,7 @@ Ext.define('Oph.field.Chart', {
 		}
 		//config.img_src = '/'+chart_servlet+'?'+chartType+'='+config.oph_item+'&period='+config.oph_period+'&w='+config.oph_w+'&h='+config.oph_h;
 		
-		config.img_src = '/'+chart_servlet+'?'+chartType+'='+config.oph_item+'&period='+config.oph_period;
+		config.img_src = '../'+chart_servlet+'?'+chartType+'='+config.oph_item+'&period='+config.oph_period;
 		this.callParent([config]);
         this.setHtml('<div style="width:100%;padding:0.4em;"><img id="img'+config.oph_id+'" src="'+config.img_src+'&random=' + new Date().getTime() + '" style="width:100%;"></div>');
 		
@@ -1941,7 +1941,7 @@ function createSliderWidget(oph_item, oph_label, oph_icon) {
         minValue: 0,
         maxValue: 100,
         oph_item: oph_item,
-		label: '<div class="'+icon_class+'" style="'+icon_style+'(/images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
+		label: '<div class="'+icon_class+'" style="'+icon_style+'(../images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
     };
 }
 
@@ -1950,7 +1950,7 @@ function createTextWidget(oph_label, oph_icon) {
     return {
         xtype: 'oph_textfield',
 		html: oph_label.match(/\[(.*?)\]/) ? oph_label.match(/\[(.*?)\]/)[1] : oph_label,
-        label: '<div class="'+icon_class+'" style="'+icon_style+'(/images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/\[(.*?)\]/, '')+'</div>'
+        label: '<div class="'+icon_class+'" style="'+icon_style+'(../images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/\[(.*?)\]/, '')+'</div>'
     };
 }
 
@@ -1958,7 +1958,7 @@ function createToggleWidget(oph_item, oph_label, oph_icon) {
     return {
         xtype: 'oph_togglefield',
         oph_item: oph_item,
-		label: '<div class="'+icon_class+'" style="'+icon_style+'(/images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
+		label: '<div class="'+icon_class+'" style="'+icon_style+'(../images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
     };
 
 }
@@ -1967,7 +1967,7 @@ function createRollershutterWidget(oph_item, oph_label, oph_icon) {
     return {
         xtype: 'oph_rollershutterfield',
         oph_item: oph_item,
-		label: '<div class="'+icon_class+'" style="'+icon_style+'(/images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
+		label: '<div class="'+icon_class+'" style="'+icon_style+'(../images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
     };
 
 }
@@ -2008,7 +2008,7 @@ function createSelectionWidget(oph_item, options, oph_label, oph_icon) {
         options: options,
         oph_item: oph_item,
 		usePicker: oph_usepicker,
-		label: '<div class="'+icon_class+'" style="'+icon_style+'(/images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
+		label: '<div class="'+icon_class+'" style="'+icon_style+'(../images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
 		
     }
 };
@@ -2023,7 +2023,7 @@ function createSetpointWidget(oph_item, oph_minvalue, oph_maxvalue, oph_step, op
         increment: Number(oph_step),
 		defaultValue: oph_minvalue,
         cycle: false,
-		label: '<div class="'+icon_class+'" style="'+icon_style+'(/images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
+		label: '<div class="'+icon_class+'" style="'+icon_style+'(../images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
 		
     }
 };
@@ -2039,7 +2039,7 @@ function createVideoWidget(oph_item, url, oph_label, oph_icon) {
 		style: 'background-color:white;',
 		posterUrl: './app/video.png',
 		oph_label: oph_label
-		//label: '<div class="'+icon_class+'" style="'+icon_style+'(/images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
+		//label: '<div class="'+icon_class+'" style="'+icon_style+'(../images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
 		
     }
 };
@@ -2054,7 +2054,7 @@ function createWebviewWidget(oph_item, url, oph_height, oph_label, oph_icon) {
 		height:'16em',
 		oph_label: oph_label,
 		oph_height: oph_height,
-		//label: '<div class="'+icon_class+'" style="'+icon_style+'(/images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
+		//label: '<div class="'+icon_class+'" style="'+icon_style+'(../images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
 		
     }
 };
@@ -2067,7 +2067,7 @@ function createButtonsWidget(oph_item, options, oph_label, oph_icon) {
         xtype: 'oph_buttons_selectfield',
         options: options,
         oph_item: oph_item,
-		label: '<div class="'+icon_class+'" style="'+icon_style+'(/images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
+		label: '<div class="'+icon_class+'" style="'+icon_style+'(../images/' + oph_icon + '.png);"></div><div class="oph_label">' + oph_label.replace(/[\[\]']+/g, '')+'</div>'
     }
 };
 
@@ -2110,9 +2110,9 @@ function createChartWidget(oph_item, oph_id, oph_w, oph_h, oph_period, oph_refre
 
 var oph_app = Ext.application({
     name: 'OpenHAB',
-	icon: '/images/icon.png',
-    tabletStartupScreen: '/images/splash-ipad-v.png',
-    phoneStartupScreen: '/images/splash-iphone.png',
+	icon: '../images/icon.png',
+    tabletStartupScreen: '../images/splash-ipad-v.png',
+    phoneStartupScreen: '../images/splash-iphone.png',
     glossOnIcon: false,
 
 
@@ -2226,7 +2226,7 @@ var oph_app = Ext.application({
                     itemtap: NavBarItemTap,
                 }, getItemTextTpl: function (node) {
 
-                    return '<tpl if="icon"><div class="'+icon_class+'" style="'+icon_style+'(/images/{icon}.png);"></div></tpl><div class="oph_label">{text}</div><span class="arrow"></span>';
+                    return '<tpl if="icon"><div class="'+icon_class+'" style="'+icon_style+'(../images/{icon}.png);"></div></tpl><div class="oph_label">{text}</div><span class="arrow"></span>';
                 }
 
             }));
