@@ -38,7 +38,7 @@ public class ItemStateChangeListener extends ResourceStateChangeListener {
 	@Override
 	protected Object getResponseObject(HttpServletRequest request) {	
 		String pathInfo = request.getPathInfo();
-
+		logger.debug("PathInfo = "+pathInfo);
 		if(pathInfo.endsWith("/state")) {
 			// we need to return the plain value
 			if (pathInfo.startsWith("/" + ItemResource.PATH_ITEMS)) {

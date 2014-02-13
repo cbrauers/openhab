@@ -100,7 +100,7 @@ public class SitemapResource {
 		String responseType = MediaTypeHelper.getResponseMediaType(headers.getAcceptableMediaTypes(), type);
 		if(responseType!=null) {
 	    	Object responseObject = responseType.equals(MediaTypeHelper.APPLICATION_X_JAVASCRIPT) ?
-	    			new JSONWithPadding(new SitemapListBean(getSitemapBeans(uriInfo.getAbsolutePathBuilder().build())), callback) : new SitemapListBean(getSitemapBeans(uriInfo.getAbsolutePathBuilder().build()));
+	    			new JSONWithPadding(new SitemapListBean(getSitemapBeans(ReverseProxyHelper.prefixBuilder(uriInfo.getAbsolutePathBuilder(),headers).build())), callback) : new SitemapListBean(getSitemapBeans(ReverseProxyHelper.prefixBuilder(uriInfo.getAbsolutePathBuilder(),headers).build()));
 	    	return Response.ok(responseObject, responseType).build();
 		} else {
 			return Response.notAcceptable(null).build();
@@ -118,7 +118,7 @@ public class SitemapResource {
 		String responseType = MediaTypeHelper.getResponseMediaType(headers.getAcceptableMediaTypes(), type);
 		if(responseType!=null) {
 	    	Object responseObject = responseType.equals(MediaTypeHelper.APPLICATION_X_JAVASCRIPT) ?
-	    			new JSONWithPadding(getSitemapBean(sitemapname, uriInfo.getBaseUriBuilder().build()), callback) : getSitemapBean(sitemapname, uriInfo.getBaseUriBuilder().build());
+	    			new JSONWithPadding(getSitemapBean(sitemapname, ReverseProxyHelper.prefixBuilder(uriInfo.getBaseUriBuilder(),headers).build()), callback) : getSitemapBean(sitemapname, ReverseProxyHelper.prefixBuilder(uriInfo.getBaseUriBuilder(),headers).build());
 	    	return Response.ok(responseObject, responseType).build();
 		} else {
 			return Response.notAcceptable(null).build();
@@ -140,7 +140,7 @@ public class SitemapResource {
 			String responseType = MediaTypeHelper.getResponseMediaType(headers.getAcceptableMediaTypes(), type);
 			if(responseType!=null) {
 		    	Object responseObject = responseType.equals(MediaTypeHelper.APPLICATION_X_JAVASCRIPT) ?
-		    			new JSONWithPadding(getPageBean(sitemapname, pageId, uriInfo.getBaseUriBuilder().build()), callback) : getPageBean(sitemapname, pageId, uriInfo.getBaseUriBuilder().build());
+		    			new JSONWithPadding(getPageBean(sitemapname, pageId, ReverseProxyHelper.prefixBuilder(uriInfo.getBaseUriBuilder(),headers).build()), callback) : getPageBean(sitemapname, pageId, ReverseProxyHelper.prefixBuilder(uriInfo.getBaseUriBuilder(),headers).build());
 		    	throw new WebApplicationException(Response.ok(responseObject, responseType).build());
 			} else {
 				throw new WebApplicationException(Response.notAcceptable(null).build());

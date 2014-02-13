@@ -81,6 +81,7 @@ public class ItemResource {
     public static final String PATH_ITEMS = "items";
     
 	@Context UriInfo uriInfo;
+	@Context HttpHeaders headers;
 	@GET
     @Produces( { MediaType.WILDCARD })
     public Response getItems(
@@ -195,7 +196,7 @@ public class ItemResource {
     		if(command!=null) {
     			logger.debug("Received HTTP POST request at '{}' with value '{}'.", uriInfo.getPath(), value);
     			RESTApplication.getEventPublisher().postCommand(itemname, command);
-    			return Response.created(localUriInfo.getAbsolutePathBuilder().path("state").build()).build();
+    			return Response.created(ReverseProxyHelper.prefixBuilder(localUriInfo.getAbsolutePathBuilder(),headers).path("state").build()).build();
     		} else {
     			logger.warn("Received HTTP POST request at '{}' with an invalid status value '{}'.", uriInfo.getPath(), value);
     			return Response.status(Status.BAD_REQUEST).build();
@@ -245,7 +246,7 @@ public class ItemResource {
 		List<ItemBean> beans = new LinkedList<ItemBean>();
 		ItemUIRegistry registry = RESTApplication.getItemUIRegistry();
 		for(Item item : registry.getItems()) {
-			beans.add(createItemBean(item, false, uriInfo.getBaseUri().toASCIIString()));
+			beans.add(createItemBean(item, false, ReverseProxyHelper.prefixUri(uriInfo.getBaseUri(),headers).toASCIIString()));
 		}
 		return beans;
 	}
@@ -253,7 +254,7 @@ public class ItemResource {
 	private ItemBean getItemDataBean(String itemname) {
 		Item item = getItem(itemname);
 		if(item!=null) {
-			return createItemBean(item, true, uriInfo.getBaseUri().toASCIIString());
+			return createItemBean(item, true, ReverseProxyHelper.prefixUri(uriInfo.getBaseUri(),headers).toASCIIString());
 		} else {
 			logger.info("Received HTTP GET request at '{}' for the unknown item '{}'.", uriInfo.getPath(), itemname);
 			throw new WebApplicationException(404);

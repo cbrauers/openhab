@@ -8,6 +8,8 @@
  */
 package org.openhab.io.rest.internal.resources;
 
+import java.util.List;
+
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,9 +19,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.openhab.io.rest.internal.resources.beans.RootBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.api.json.JSONWithPadding;
 
@@ -36,9 +41,9 @@ import com.sun.jersey.api.json.JSONWithPadding;
  */
 @Path("/")
 public class RootResource {
-
+	private static final Logger logger = LoggerFactory.getLogger(RootResource.class);
     @Context UriInfo uriInfo;
-
+    @Context HttpHeaders headers;
     @GET 
     @Produces( { MediaType.WILDCARD })
     public Response getRoot(
@@ -54,12 +59,10 @@ public class RootResource {
 			return Response.notAcceptable(null).build();
     	}
     }
-
 	private RootBean getRootBean() {
 		RootBean bean = new RootBean();
-	    
-	    bean.links.put("items", uriInfo.getBaseUriBuilder().path(ItemResource.PATH_ITEMS).build().toASCIIString());
-	    bean.links.put("sitemaps", uriInfo.getBaseUriBuilder().path(SitemapResource.PATH_SITEMAPS).build().toASCIIString());
+	    bean.links.put("items", ReverseProxyHelper.prefixBuilder(uriInfo.getBaseUriBuilder(),headers).path(ItemResource.PATH_ITEMS).build().toASCIIString());
+	    bean.links.put("sitemaps", ReverseProxyHelper.prefixBuilder(uriInfo.getBaseUriBuilder(),headers).path(SitemapResource.PATH_SITEMAPS).build().toASCIIString());
 	    
 	    return bean;
 	}

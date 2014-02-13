@@ -119,7 +119,7 @@ public class SitemapStateChangeListener extends ResourceStateChangeListener {
 		
 		String responseType = (new ResponseTypeHelper()).getResponseType(request);
 		if(responseType!=null) {
-			URI basePath = UriBuilder.fromUri(request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+(request.getContextPath().equals("null")?"":request.getContextPath()) + RESTApplication.REST_SERVLET_ALIAS +"/").build();
+			URI basePath = UriBuilder.fromUri(request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + (request.getHeader("X-Forwarded-Path").equals("null")?"":request.getHeader("X-Forwarded-Path")) + (request.getContextPath().equals("null")?"":request.getContextPath()) + RESTApplication.REST_SERVLET_ALIAS +"/").build();
 			if (pathInfo.startsWith("/" + SitemapResource.PATH_SITEMAPS)) {
 	        	String[] pathSegments = pathInfo.substring(1).split("/");
 	            if(pathSegments.length>=3) {
